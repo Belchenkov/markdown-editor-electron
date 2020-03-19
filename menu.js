@@ -20,7 +20,10 @@ const template = [
                 role: 'toggleDevTools'
             },
             { type: 'separator' },
-            { role: 'reload' }
+            {
+                role: 'reload',
+                accelerator: 'Alt+R'
+            }
         ]
     }
 ];
