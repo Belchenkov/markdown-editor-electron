@@ -1,4 +1,6 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Menu } = require('electron');
+
+const menu = require('./menu');
 
 let window;
 
@@ -12,3 +14,5 @@ app.on('ready', () => {
     });
     window.loadFile('index.html');
 });
+
+Menu.setApplicationMenu(menu);
