@@ -11,6 +11,15 @@ const template = [
                 }
             }
         ]
+    },
+    {
+        label: 'Debugging',
+        submenu: [
+            {
+                label: 'Dev Tools',
+                role: 'toggleDevTools'
+            }
+        ]
     }
 ];
 
