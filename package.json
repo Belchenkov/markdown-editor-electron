@@ -4,7 +4,8 @@
   "description": "Building a Markdown Editor on Electron.js",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "set DEBUG=true & electron .",
+    "build:macos": "electron-builder --macos --dir"
   },
   "keywords": [
     "Node.js",

@@ -11,20 +11,6 @@ const template = [
                 }
             }
         ]
-    },
-    {
-        label: 'Debugging',
-        submenu: [
-            {
-                label: 'Dev Tools',
-                role: 'toggleDevTools'
-            },
-            { type: 'separator' },
-            {
-                role: 'reload',
-                accelerator: 'Alt+R'
-            }
-        ]
     }
 ];
 
@@ -37,6 +23,23 @@ if (process.platform === 'darwin') {
             { role: 'quit' }
         ]
     })
+}
+
+if (process.env.DEBUG) {
+    template.push({
+        label: 'Debugging',
+        submenu: [
+            {
+                label: 'Dev Tools',
+                role: 'toggleDevTools'
+            },
+            { type: 'separator' },
+            {
+                role: 'reload',
+                accelerator: 'Alt+R'
+            }
+        ]
+    });
 }
 
 const menu = Menu.buildFromTemplate(template);
