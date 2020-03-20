@@ -16,9 +16,19 @@
 
     <script src="./node_modules/simplemde/dist/simplemde.min.js"></script>
     <script>
-        var editor = new SimpleMDE({
+        // SimpleMDE
+        const editor = new SimpleMDE({
             element: document.getElementById('editor')
         });
+
+        // ipcRenderer
+        const { ipcRenderer } = require('electron');
+        ipcRenderer.on('editor-event', (event, arg) => {
+            console.log(arg);
+            // send message back to main process
+            event.sender.send('editor-reply', `Received ${arg}`);
+        });
+        ipcRenderer.send('editor-reply', 'Page Loaded');
     </script>
 </body>
 </html>

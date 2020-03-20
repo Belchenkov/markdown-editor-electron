@@ -1,4 +1,5 @@
 const { app, Menu, shell } = require('electron');
+const { ipcMain } = require('electron');
 
 const template = [
     {
@@ -43,5 +44,9 @@ if (process.env.DEBUG) {
 }
 
 const menu = Menu.buildFromTemplate(template);
+
+ipcMain.on('editor-reply', (event, arg) => {
+    console.log(`Received reply from web page: ${arg}`);
+});
 
 module.exports = menu;
