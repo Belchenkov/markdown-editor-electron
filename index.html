@@ -21,10 +21,31 @@
             element: document.getElementById('editor')
         });
 
+
         // ipcRenderer
         const { ipcRenderer } = require('electron');
         ipcRenderer.on('editor-event', (event, arg) => {
             console.log(arg);
+
+            switch (arg) {
+                case 'toggle-bold':
+                    editor.toggleBold();
+                    break;
+                case 'italic':
+                    editor.toggleItalic();
+                    break;
+                case 'strikethrough':
+                    editor.toggleStrikethrough();
+                    break;
+                default:
+                    break;
+            }
+         /*   if (arg === 'toggle-bold') {
+                editor.toggleBold();
+            } if (arg === 'toggle-bold') {
+                editor.toggleBold();
+            }*/
+
             // send message back to main process
             event.sender.send('editor-reply', `Received ${arg}`);
         });

@@ -25,6 +25,26 @@ const template = [
                         'toggle-bold'
                     );
                 }
+            },
+            {
+                label: 'Italic',
+                click() {
+                    const window = BrowserWindow.getFocusedWindow();
+                    window.webContents.send(
+                        'editor-event',
+                        'italic'
+                    );
+                }
+            },
+            {
+                label: 'Strikethrough',
+                click() {
+                    const window = BrowserWindow.getFocusedWindow();
+                    window.webContents.send(
+                        'editor-event',
+                        'strikethrough'
+                    );
+                }
             }
         ]
     }
