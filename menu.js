@@ -1,4 +1,4 @@
-const { app, Menu, shell } = require('electron');
+const { app, Menu, shell, BrowserWindow } = require('electron');
 const { ipcMain } = require('electron');
 
 const template = [
@@ -9,6 +9,21 @@ const template = [
                 label: 'About Editor Component',
                 click() {
                     shell.openExternal('https://simplemde.com/');
+                }
+            }
+        ]
+    },
+    {
+        label: 'Format',
+        submenu: [
+            {
+                label: 'Toggle Bold',
+                click() {
+                    const window = BrowserWindow.getFocusedWindow();
+                    window.webContents.send(
+                        'editor-event',
+                        'toggle-bold'
+                    );
                 }
             }
         ]
