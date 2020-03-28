@@ -40,11 +40,10 @@
                 default:
                     break;
             }
-         /*   if (arg === 'toggle-bold') {
-                editor.toggleBold();
-            } if (arg === 'toggle-bold') {
-                editor.toggleBold();
-            }*/
+
+            if (arg === 'save') {
+                event.sender.send('save', editor.value());
+            }
 
             // send message back to main process
             event.sender.send('editor-reply', `Received ${arg}`);
