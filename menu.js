@@ -1,5 +1,13 @@
-const { app, Menu, shell, BrowserWindow, globalShortcut } = require('electron');
+const {
+    app,
+    Menu,
+    shell,
+    BrowserWindow,
+    dialog,
+    globalShortcut
+} = require('electron');
 const { ipcMain } = require('electron');
+const fs = require('fs');
 
 const template = [
     {
@@ -88,9 +96,27 @@ app.on('ready', () => {
     });
 });
 
-ipcMain.on('save', (event, arg) => {
+ipcMain.on('save', (event, content) => {
     console.log(`Saving content of the file`);
-    console.log(arg);
+    console.log(content);
+
+    const window = BrowserWindow.getFocusedWindow();
+    const options = {
+        title: 'Save markdown file',
+        filters: [
+            {
+                name: 'MyFile',
+                extensions: ['md']
+            }
+        ]
+    };
+    dialog.showSaveDialog(window, options)
+        .then(({ filePath }) => {
+            if (filePath) {
+                console.log(`Saving content to the file: ${filePath}`);
+                fs.writeFileSync(filePath, content);
+            }
+        });
 });
 
 ipcMain.on('editor-reply', (event, arg) => {
