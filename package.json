@@ -4,7 +4,8 @@
   "description": "Building a Markdown Editor on Electron.js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "set DEBUG=true & electron .",
+    "build:macos": "electron-builder --macos --dir"
   },
   "keywords": [
     "Node.js",
@@ -15,5 +16,8 @@
   "devDependencies": {
     "electron": "^8.1.1",
     "electron-builder": "^22.4.1"
+  },
+  "dependencies": {
+    "simplemde": "^1.11.2"
   }
 }

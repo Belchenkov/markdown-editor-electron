@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SimpleMDE -->
+    <link rel="stylesheet" href="./node_modules/simplemde/dist/simplemde.min.css">
+    <link rel="stylesheet" href="./css/main.css">
+    
+    <title>Electron: Markdown Editor</title>
+</head>
+<body ondrop="dropHandler(event);">
+    <h1>Electron Editor</h1>
+
+    <textarea id="editor"></textarea>
+
+    <script src="./node_modules/simplemde/dist/simplemde.min.js"></script>
+    <script>
+        function dropHandler(event) {
+            console.log('File(s) dropped');
+            event.preventDefault();
+
+            if (event.dataTransfer.items) {
+                if (event.dataTransfer.items[0].kind === 'file') {
+                    const file = event.dataTransfer.items[0].getAsFile();
+                    let fileExt = file.name.toString().split('.')[1];
+                    console.log(fileExt);
+                    if (fileExt === 'md') {
+                        const reader = new FileReader();
+                        reader.onload = e => {
+                            editor.codemirror.setValue(e.target.result);
+                        };
+                        reader.readAsText(file);
+                    }
+                }
+            }
+        }
+
+        // SimpleMDE
+        const editor = new SimpleMDE({
+            element: document.getElementById('editor')
+        });
+
+        // ipcRenderer
+        const { ipcRenderer } = require('electron');
+        ipcRenderer.on('editor-event', (event, arg) => {
+            console.log(arg);
+
+            switch (arg) {
+                case 'toggle-bold':
+                    editor.toggleBold();
+                    break;
+                case 'italic':
+                    editor.toggleItalic();
+                    break;
+                case 'strikethrough':
+                    editor.toggleStrikethrough();
+                    break;
+                default:
+                    break;
+            }
+
+            if (arg === 'save') {
+                event.sender.send('save', editor.value());
+            }
+
+            // send message back to main process
+            event.sender.send('editor-reply', `Received ${arg}`);
+        });
+
+        ipcRenderer.on('load', (event, content) => {
+            if (content) {
+                editor.value(content);
+            }
+        });
+
+        ipcRenderer.send('editor-reply', 'Page Loaded');
+    </script>
+</body>
+</html>
