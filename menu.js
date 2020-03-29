@@ -94,6 +94,27 @@ app.on('ready', () => {
         const window = BrowserWindow.getFocusedWindow();
         window.webContents.send('editor-event', 'save');
     });
+    globalShortcut.register('CommandOrControl+O', () => {
+        // show open dialog
+        console.log('Open the file');
+        const window = BrowserWindow.getFocusedWindow();
+
+        const options = {
+            title: 'Pick a markdown file',
+            filters: [
+                { name: 'Markdown files', extensions: ['md'] },
+                { name: 'Text files', extensions: ['txt'] }
+            ]
+        };
+
+        dialog.showOpenDialog(window, options)
+            .then(({ filePaths}) => {
+                if (filePaths && filePaths.length > 0) {
+                    const content = fs.readFileSync(filePaths[0]).toString();
+                    window.webContents.send('load', content);
+                }
+            });
+    });
 });
 
 ipcMain.on('save', (event, content) => {
@@ -122,7 +143,5 @@ ipcMain.on('save', (event, content) => {
 ipcMain.on('editor-reply', (event, arg) => {
     console.log(`Received reply from web page: ${arg}`);
 });
-
-
 
 module.exports = menu;

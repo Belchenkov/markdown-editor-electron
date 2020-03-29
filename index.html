@@ -48,6 +48,13 @@
             // send message back to main process
             event.sender.send('editor-reply', `Received ${arg}`);
         });
+
+        ipcRenderer.on('load', (event, content) => {
+            if (content) {
+                editor.value(content);
+            }
+        });
+
         ipcRenderer.send('editor-reply', 'Page Loaded');
     </script>
 </body>
