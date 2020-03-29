@@ -59,17 +59,6 @@ const template = [
         ]
     },
     {
-        role: 'help',
-        submenu: [
-            {
-                label: 'About Editor Component',
-                click() {
-                    shell.openExternal('https://simplemde.com/');
-                }
-            }
-        ]
-    },
-    {
         label: 'Format',
         submenu: [
             {
@@ -100,6 +89,17 @@ const template = [
                         'editor-event',
                         'strikethrough'
                     );
+                }
+            }
+        ]
+    },
+    {
+        role: 'help',
+        submenu: [
+            {
+                label: 'About Editor Component',
+                click() {
+                    shell.openExternal('https://simplemde.com/');
                 }
             }
         ]
