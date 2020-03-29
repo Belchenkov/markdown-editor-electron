@@ -9,7 +9,55 @@ const {
 const { ipcMain } = require('electron');
 const fs = require('fs');
 
+function saveFile() {
+    console.log('Saving the file');
+
+    const window = BrowserWindow.getFocusedWindow();
+    window.webContents.send('editor-event', 'save');
+}
+
+function loadFile() {
+    // show open dialog
+    console.log('Open the file');
+    const window = BrowserWindow.getFocusedWindow();
+
+    const options = {
+        title: 'Pick a markdown file',
+        filters: [
+            { name: 'Markdown files', extensions: ['md'] },
+            { name: 'Text files', extensions: ['txt'] }
+        ]
+    };
+
+    dialog.showOpenDialog(window, options)
+        .then(({ filePaths}) => {
+            if (filePaths && filePaths.length > 0) {
+                const content = fs.readFileSync(filePaths[0]).toString();
+                window.webContents.send('load', content);
+            }
+        });
+}
+
 const template = [
+    {
+        label: 'File',
+        submenu: [
+            {
+                label: 'Open',
+                accelerator: 'CommandOrControl+O',
+                click() {
+                    loadFile();
+                }
+            },
+            {
+                label: 'Save',
+                accelerator: 'CommandOrControl+S',
+                click() {
+                    saveFile();
+                }
+            }
+        ]
+    },
     {
         role: 'help',
         submenu: [
@@ -90,36 +138,15 @@ const menu = Menu.buildFromTemplate(template);
 
 app.on('ready', () => {
     globalShortcut.register('CommandOrControl+S', () => {
-        console.log('Saving the file');
-        const window = BrowserWindow.getFocusedWindow();
-        window.webContents.send('editor-event', 'save');
+        saveFile();
     });
     globalShortcut.register('CommandOrControl+O', () => {
-        // show open dialog
-        console.log('Open the file');
-        const window = BrowserWindow.getFocusedWindow();
-
-        const options = {
-            title: 'Pick a markdown file',
-            filters: [
-                { name: 'Markdown files', extensions: ['md'] },
-                { name: 'Text files', extensions: ['txt'] }
-            ]
-        };
-
-        dialog.showOpenDialog(window, options)
-            .then(({ filePaths}) => {
-                if (filePaths && filePaths.length > 0) {
-                    const content = fs.readFileSync(filePaths[0]).toString();
-                    window.webContents.send('load', content);
-                }
-            });
+        loadFile();
     });
 });
 
 ipcMain.on('save', (event, content) => {
     console.log(`Saving content of the file`);
-    console.log(content);
 
     const window = BrowserWindow.getFocusedWindow();
     const options = {

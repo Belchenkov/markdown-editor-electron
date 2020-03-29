@@ -21,7 +21,6 @@
             element: document.getElementById('editor')
         });
 
-
         // ipcRenderer
         const { ipcRenderer } = require('electron');
         ipcRenderer.on('editor-event', (event, arg) => {
