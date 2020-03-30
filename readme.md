@@ -2,6 +2,8 @@
 
 > Building a Markdown Editor on Electron.js
 
+Demo: https://github.com/Belchenkov/markdown-editor-electron/releases/tag/master
+
 Running the project
  
  ```sh
